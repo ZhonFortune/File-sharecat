@@ -15,20 +15,21 @@ if(ENV === 'production') {
 }
 
 // 检查环境变量是否齐全
-const requiredEnv = ['SECRET_KEY', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'MONGO_URI'];
+const requiredEnv = ['PORT', 'HOST', 'SECRET_KEY', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'MONGO_URI'];
 for(const key of requiredEnv) {
   if(process.env[key] === undefined || process.env[key] === '') {
     console.error(`缺少环境变量: ${key}`);
     process.exit(1);
   }
-  console.log(`环境变量: ${key} = ${process.env[key]}`);
+  ENV === 'development ' ? console.log(`环境变量: ${key} = ${process.env[key]}`) : null;
+  // console.log(`环境变量: ${key} = ${process.env[key]}`)
 }
 
 // 路由
 const apiRouter = require('./routes');
 
-const PORT = process.env.PORT || 4320;
-const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT
+const HOST = process.env.HOST
 
 const app = express();
 const corsOrigin = process.env.ENV === 'production' ? process.env.DOMAIN : (process.env.CORS_ORIGIN || 'http://localhost:5173');

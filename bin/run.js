@@ -6,8 +6,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = process.env.PORT || '4320';
-const HOST = process.env.HOST || 'localhost';
+const PORT = process.env.PORT
+const HOST = process.env.HOST
 
 function runCommand(command, args, options = {}) {
     // 把环境变量合并进去，优先使用传入options.env，否则使用 process.env
