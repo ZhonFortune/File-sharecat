@@ -1,16 +1,16 @@
 ![banner](./public/banner.png)
 
-# FILE-SHARECAT
+<div align="center">
 
-<br>
-
-<center>
+<h1>FILE-SHARECAT</h1>
 
 ![VUE3](https://img.shields.io/badge/Vue3-4FC08D?logo=vue.js&logoColor=white) ![!Node.js](https://img.shields.io/badge/Node.js-43853D?logo=Node.js) ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white) ![Version](https://img.shields.io/github/package-json/v/ZhonFortune/File-sharecat) ![License](https://img.shields.io/github/license/ZhonFortune/File-sharecat) ![platform](https://img.shields.io/badge/Platform-Web-01D7E2)
 
+[部署教程](./docs/DEPLOY.md) | [更新日志](./docs/UPDATE.md)
+
 [![Railway](https://railway.app/button.svg)](https://railway.app/new/template?repository=https://github.com/ZhonFortune/File-sharecat)
 
-</center>
+</div>
 
 ---
 
@@ -26,10 +26,6 @@
 - ☁️ **对象存储**：仅支持 S3 协议的对象存储平台以存储资源。
 
 该项目非常适合用于当作私人资源库，亦可以使用私密资源模块与他人分享，当前已完成全部基础功能，后续将不定期优化和迭代。
-
-<br>
-
-[点击查看部署教程](./docs/DEPLOY.md)
 
 <br>
 

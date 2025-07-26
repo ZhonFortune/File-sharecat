@@ -64,7 +64,7 @@ onMounted(() => {
   getLabelNum()
 })
 const announcements = [
-  'Beta 0.1.0 - 部署调试,检查是否可以在Railway上运行',
+  'Beta 0.1.0 - 新增对象存储环境变量',
 ]
 </script>
 
