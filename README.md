@@ -8,9 +8,7 @@
 
 [部署教程](./docs/DEPLOY.md) | [更新日志](./docs/UPDATE.md)
 
-<a href="https://railway.com/deploy/HQIhln?referralCode=YFC8-i" target="_blank" rel="noopener noreferrer">
-  <img src="https://railway.com/button.svg" alt="Deploy on Railway" width="auto" height="30px" style="vertical-align: middle;" />
-</a>
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/HQIhln?referralCode=YFC8-i)
 
 </div>
 
