@@ -1,15 +1,26 @@
-# ⚙️ 部署教程
+<div align="center">
+    <h1>部署文档</h1>
+    <a href="https://railway.com/deploy/HQIhln?referralCode=YFC8-i" target="_blank" rel="noopener noreferrer">
+  <img src="https://railway.com/button.svg" alt="Deploy on Railway" width="auto" height="30px" style="vertical-align: middle;" />
+</a>
+
+<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZhonFortune%2FFile-sharecat&env=VITE_BACKEND_URL=https%3A%2F%2Fapi.example.com" target="_blank" rel="noopener noreferrer">
+  <img src="https://vercel.com/button" width="auto" height="30px" alt="Deploy with Vercel" style="vertical-align: middle;" />
+</a>
+
+</div>
 
 <br>
 
 ## 环境变量配置
 
-本地部署时需修改 `.env` 以配置环境变量，Railway 部署时需在 `Settings`/`Environment Variables` 中配置环境变量。
+本地部署时需修改 `.env` 以配置环境变量，Railway/Vercel 部署时需在 `Settings`/`Environment Variables` 中配置环境变量。
 
 | 变量名             | 描述                                                                 | 示例值                                                         | 必填 |
 |--------------------|----------------------------------------------------------------------|-----------------------------------------------------------------|------|
 | `PORT`             | 服务器监听端口(Railway 部署需为空值)                                                       | `4320`                                                          | ⬜️   |
 | `HOST`             | 服务器主机名（Railway 部署需为空值）                      | `0.0.0.0`                                                       | ⬜️   |
+| `VITE_BACKEND_URL`             | 用于前端发送请求的后端地址(若使用一体化启动则无需填写)                     | `localhost:4320`                                                       | ⬜️   |
 | `MONGO_URI`        | MongoDB 数据库连接字符串                                             | `mongodb+srv://xxx...`               | ✅   |
 | `OS_ENDPOINT`      | 对象存储服务地址(仅支持 S3 协议的服务)           | `https://r2.yourdomain.com`                                     | ✅   |
 | `OS_REGION`        | 区域(如服务商要求填写)                                             | `us-east-1`                                           | ⬜️   |
@@ -60,14 +71,31 @@
 <br>
 
 ## 🚀 部署
+推荐先部署后端再部署(构建)前端
 
-### Railway
+<br>
 
-1. 在 [Railway](https://railway.app/) 注册或登录
-2. 点击 `New Project` 按钮
-3. 选择 `Node.js`，并点击 `Create` 按钮
-4. 在 `Settings`/`Environment Variables` 中添加环境变量
-5. 点击 `Deploy` 按钮
+### Vercel (前端)
+
+1. FORK 项目
+2. 在 [Vercel](https://vercel.com/) 注册或登录
+3. 点击 `New Project` 按钮
+4. 选择 `File-sharecat` 仓库，并点击 `Import` 按钮
+5. 在 `Settings`/`Environment Variables` 中添加环境变量
+6. 点击 `Deploy` 按钮
+7. 或点击下方按钮快速部署
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZhonFortune%2FFile-sharecat&env=VITE_BACKEND_URL=https%3A%2F%2Fapi.example.com)
+
+<br>
+
+### Railway (后端)
+
+1. FORK 项目
+2. 在 [Railway](https://railway.app/) 注册或登录
+3. 点击 `New Project` 按钮
+4. 选择 `Node.js`，并点击 `Create` 按钮
+5. 在 `Settings`/`Environment Variables` 中添加环境变量
+6. 点击 `Deploy` 按钮
 6. 或点击下方按钮快速部署
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/HQIhln?referralCode=YFC8-i)
 
@@ -97,7 +125,5 @@ npm i -g file-sharecat
 # 启动项目
 fsc-server
 ```
-
-<br>
 
 

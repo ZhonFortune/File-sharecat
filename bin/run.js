@@ -1,3 +1,5 @@
+// bin/run.js
+// 构建前端和启动后端服务一体化
 import { spawn } from 'child_process';
 import path from 'path';
 import os from 'os';

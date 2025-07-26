@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "serve": "server/serve.js",
+    "frontend": "node ./bin/frontend.js",
+    "backend": "node ./bin/backend.js",
     "start": "node ./bin/run.js"
   },
   "bin": {
