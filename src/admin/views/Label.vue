@@ -144,7 +144,7 @@ import CryptoJS from 'crypto-js'
 import { message, Modal } from 'ant-design-vue'
 import { PlusCircleOutlined } from '@ant-design/icons-vue'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = BACKEND_URL + '/api/v1'
 
 const labelsList = ref([])

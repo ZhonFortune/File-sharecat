@@ -101,7 +101,7 @@ import { SearchOutlined } from '@ant-design/icons-vue';
 import { tagProps } from 'ant-design-vue/es/tag';
 import axios from 'axios';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = `${BACKEND_URL}/api/v1`
 
 const optionGroup = ref([])

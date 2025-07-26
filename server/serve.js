@@ -5,18 +5,26 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
-const ENV = process.env.ENV.trim().toLowerCase();
-if (ENV !== 'development' && ENV !== 'production') {
-  console.error('环境变量 ENV 必须为 development 或 production');
-  process.exit(1);
-}else if (ENV === 'development') {
-  // 开发环境，加载 .env.development 文件
-  dotenv.config({ path: path.resolve(__dirname, '../.env.development') });
-}else {
-  // 生产环境，加载 .env文件
+//　加载环境变量
+const ENV = (process.env.ENV || '').trim().toLowerCase();
+console.log(`当前环境: ${ENV}`);
+if(ENV === 'production') {
   dotenv.config({ path: path.resolve(__dirname, '../.env') });
+} else {
+  dotenv.config({ path: path.resolve(__dirname, '../.env.development') });
 }
 
+// 检查环境变量是否齐全
+const requiredEnv = ['SECRET_KEY', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'MONGO_URI'];
+for(const key of requiredEnv) {
+  if(process.env[key] === undefined || process.env[key] === '') {
+    console.error(`缺少环境变量: ${key}`);
+    process.exit(1);
+  }
+  console.log(`环境变量: ${key} = ${process.env[key]}`);
+}
+
+// 路由
 const apiRouter = require('./routes');
 
 const PORT = process.env.PORT || 4320;

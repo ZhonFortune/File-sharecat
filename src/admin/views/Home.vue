@@ -35,7 +35,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = BACKEND_URL + '/api/v1';
 
 let labelNum = ref(0);
@@ -64,6 +64,7 @@ onMounted(() => {
   getLabelNum()
 })
 const announcements = [
+  'Beta 0.1.1 - 修复后端接口BUG',
   'Beta 0.1.0 - 部署调试,检查是否可以在Railway上运行',
 ]
 </script>

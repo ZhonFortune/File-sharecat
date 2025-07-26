@@ -75,7 +75,7 @@ import { ref, onMounted } from 'vue'
 import { message } from 'ant-design-vue'
 import axios from 'axios'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const activeTab = ref('public')
 const loading = ref(false)
 

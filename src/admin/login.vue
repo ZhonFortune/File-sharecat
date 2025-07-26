@@ -34,7 +34,7 @@ import axios from 'axios'
 import { message } from 'ant-design-vue'
 import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = `${BACKEND_URL}/api/v1/admin`
 
 const router = useRouter()

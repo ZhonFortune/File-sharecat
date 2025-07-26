@@ -76,7 +76,7 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = `${BACKEND_URL}/api/v1`
 
 const resource = ref(null)
