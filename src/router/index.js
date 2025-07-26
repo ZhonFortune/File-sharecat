@@ -125,7 +125,7 @@ const router = createRouter({
 import axios from 'axios'
 
 // 路由守卫
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = `${BACKEND_URL}/api/v1/admin`
 const ISDEV = import.meta.env?.MODE === 'development' ? true : false
 

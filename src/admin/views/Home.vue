@@ -36,7 +36,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
-const API_URL = BACKEND_URL + '/api/v1';
+const API_URL = `${BACKEND_URL}/api/v1`;
 
 let labelNum = ref(0);
 let publicResourceNum = ref(0);
