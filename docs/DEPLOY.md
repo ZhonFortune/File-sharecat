@@ -16,7 +16,6 @@
 |--------------------|----------------------------------------------------------------------|-----------------------------------------------------------------|------|
 | `PORT`             | 服务器监听端口(Railway 部署需为空值)                                                       | `4320`                                                          | ⬜️   |
 | `HOST`             | 服务器主机名（Railway 部署需为空值）                      | `0.0.0.0`                                                       | ⬜️   |
-| `VITE_BACKEND_URL`             | 用于前端发送请求的后端地址(若使用一体化启动则无需填写)                     | `localhost:4320`                                                       | ⬜️   |
 | `MONGO_URI`        | MongoDB 数据库连接字符串                                             | `mongodb+srv://xxx...`               | ✅   |
 | `OS_ENDPOINT`      | 对象存储服务地址(仅支持 S3 协议的服务)           | `https://r2.yourdomain.com`                                     | ✅   |
 | `OS_REGION`        | 区域(如服务商要求填写)                                             | `us-east-1`                                           | ⬜️   |
@@ -79,7 +78,7 @@
 4. 选择 `Node.js`，并点击 `Create` 按钮
 5. 在 `Settings`/`Environment Variables` 中添加环境变量
 6. 点击 `Deploy` 按钮
-6. 或点击下方按钮快速部署
+6. 或点击下方按钮快速部署 (无需FORK)
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/HQIhln?referralCode=YFC8-i)
 
 <br>

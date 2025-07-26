@@ -1,13 +1,11 @@
 {
   "name": "file-sharecat",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "frontend": "node ./bin/frontend.js",
-    "backend": "node ./bin/backend.js",
     "start": "node ./bin/run.js"
   },
   "bin": {

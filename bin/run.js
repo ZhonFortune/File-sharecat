@@ -1,5 +1,5 @@
 // bin/run.js
-// 构建前端和启动后端服务一体化
+// 构建前端和启动后端服务一体
 import { spawn } from 'child_process';
 import path from 'path';
 import os from 'os';
@@ -34,11 +34,6 @@ function runCommand(command, args, options = {}) {
 
 async function main() {
     try {
-        await runCommand('npm', ['run', 'build'], {
-            cwd: path.resolve(__dirname),
-            env: { PORT, HOST }
-        });
-
         // 后端启动时传入环境变量
         const serverProcess = spawn('npm', ['run', 'start'], {
             cwd: path.resolve(__dirname, '../server'),
