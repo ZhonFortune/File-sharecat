@@ -32,11 +32,9 @@ const PORT = process.env.PORT
 const HOST = process.env.HOST
 
 const app = express();
-const corsOrigin = process.env.ENV === 'production' ? process.env.DOMAIN : (process.env.CORS_ORIGIN || 'http://localhost:5173');
-
+// 设置跨域,允许所有请求
 app.use(cors({
-  // 若为开发环境，则允许所有请求
-  origin: corsOrigin,
+  origin: '*',
   credentials: true,
 }), express.json(), cookieParser());
 
@@ -64,7 +62,6 @@ const { dbConnect } = require('./utils/db_connect');
       console.log(`\n\n==========================================`);
       console.log(`数据库地址: ${process.env.MONGO_URI}`);
       console.log(`当前环境: ${process.env.ENV}`);
-      console.log(`允许跨域源: ${corsOrigin}`);
       console.log(`服务运行于: http://${HOST}:${PORT}`);
       console.log(`==========================================\n`);
     });

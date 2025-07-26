@@ -12,7 +12,7 @@
   <img src="https://railway.com/button.svg" alt="Deploy on Railway" width="auto" height="30px" style="vertical-align: middle;" />
 </a>
 
-<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZhonFortune%2FFile-sharecat&env=VITE_BACKEND_URL=https%3A%2F%2Fapi.example.com" target="_blank" rel="noopener noreferrer">
+<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZhonFortune%2FFile-sharecat&env=VITE_BACKEND_URL&framework=vite" target="_blank" rel="noopener noreferrer">
   <img src="https://vercel.com/button" width="auto" height="30px" alt="Deploy with Vercel" style="vertical-align: middle;" />
 </a>
 
