@@ -10,6 +10,9 @@
     "serve": "server/serve.js",
     "start": "node ./bin/run.js"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "bin": {
     "fsc-server": "node ./bin/run.js"
   },
