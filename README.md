@@ -8,7 +8,7 @@
 
 [部署教程](./docs/DEPLOY.md) | [更新日志](./docs/UPDATE.md)
 
-[![Railway](https://railway.app/button.svg)](https://railway.app/new/template?repository=https://github.com/ZhonFortune/File-sharecat)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/HQIhln?referralCode=YFC8-i)
 
 </div>
 

@@ -69,7 +69,7 @@
 4. 在 `Settings`/`Environment Variables` 中添加环境变量
 5. 点击 `Deploy` 按钮
 6. 或点击下方按钮快速部署
-[![Railway](https://railway.app/button.svg)](https://railway.app/new/template?repository=https://github.com/ZhonFortune/File-sharecat)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/HQIhln?referralCode=YFC8-i)
 
 <br>
 
