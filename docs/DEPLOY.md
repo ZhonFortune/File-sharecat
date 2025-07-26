@@ -4,10 +4,6 @@
   <img src="https://railway.com/button.svg" alt="Deploy on Railway" width="auto" height="30px" style="vertical-align: middle;" />
 </a>
 
-<a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZhonFortune%2FFile-sharecat&env=VITE_BACKEND_URL=https%3A%2F%2Fapi.example.com" target="_blank" rel="noopener noreferrer">
-  <img src="https://vercel.com/button" width="auto" height="30px" alt="Deploy with Vercel" style="vertical-align: middle;" />
-</a>
-
 </div>
 
 <br>
@@ -72,19 +68,6 @@
 
 ## 🚀 部署
 推荐先部署后端再部署(构建)前端
-
-<br>
-
-### Vercel (前端)
-
-1. FORK 项目
-2. 在 [Vercel](https://vercel.com/) 注册或登录
-3. 点击 `New Project` 按钮
-4. 选择 `File-sharecat` 仓库，并点击 `Import` 按钮
-5. 在 `Settings`/`Environment Variables` 中添加环境变量
-6. 点击 `Deploy` 按钮
-7. 或点击下方按钮快速部署
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FZhonFortune%2FFile-sharecat&env=VITE_BACKEND_URL=https%3A%2F%2Fapi.example.com)
 
 <br>
 
