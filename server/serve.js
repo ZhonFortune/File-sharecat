@@ -15,14 +15,19 @@ if(ENV === 'production') {
 }
 
 // 检查环境变量是否齐全
-const requiredEnv = ['PORT', 'HOST', 'SECRET_KEY', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'MONGO_URI'];
+const requiredEnv = ['PORT', 'HOST', 'SECRET_KEY', 'ADMIN_USERNAME', 'ADMIN_PASSWORD', 'MONGO_URI', 'OS_ENDPOINT'
+, 'OS_ACCESS_KEY', 'OS_SECRET_KEY', 'OS_BUCKET_NAME'
+];
 for(const key of requiredEnv) {
   if(process.env[key] === undefined || process.env[key] === '') {
     console.error(`缺少环境变量: ${key}`);
     process.exit(1);
   }
-  ENV === 'development ' ? console.log(`环境变量: ${key} = ${process.env[key]}`) : null;
-  // console.log(`环境变量: ${key} = ${process.env[key]}`)
+  
+  // 调试输出
+  if(ENV === 'development') {
+    console.log(`环境变量: ${key} = ${process.env[key]}`)
+  }
 }
 
 // 路由
@@ -50,13 +55,18 @@ app.use((req, res, next) => {
   res.sendFile(path.resolve(staticPath, 'index.html'));
 })
 
+// 解析器
+app.use(express.urlencoded({ extended: true }));
+
 // 连接数据库
 const { dbConnect } = require('./utils/db_connect');
+const { osConnect } = require('./utils/os_connect');
 
 // 启动服务
 (async () => {
   try {
     await dbConnect();
+    await osConnect();
 
     app.listen(PORT, HOST, () => {
       console.log(`\n\n==========================================`);
@@ -66,7 +76,7 @@ const { dbConnect } = require('./utils/db_connect');
       console.log(`==========================================\n`);
     });
   } catch (err) {
-    console.error('启动失败: 数据库错误', err);
+    console.error(`\n\n服务启动失败: `, err);
     process.exit(1);
   }
 })();

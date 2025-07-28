@@ -8,7 +8,8 @@
         </a-flex>
 
         <a-table :columns="columns" :data-source="labelsList" :rowKey="record => record._id"
-            :style="{ marginTop: '10px' }" :pagination="{ pageSize: 5 }"
+            :style="{ marginTop: '10px'}" :pagination="{ pageSize: 5 }" 
+            :scroll="{ y: 'calc(100vh - 350px)' }"            
             :expandable="{ rowExpandable: record => record.options && record.options.length > 0 }">
             <!-- 操作列插槽 -->
             <template #bodyCell="{ column, record }">
@@ -27,7 +28,7 @@
             <!-- 展开子表格 -->
             <template #expandedRowRender="{ record }">
                 <a-table :columns="tagColumns" :data-source="record.options" :rowKey="tag => tag.id" :pagination="false"
-                    size="small">
+                    size="small" :scroll="{ y: 'calc(100vh - 470px)' }">
                     <template #bodyCell="{ column, record: tag }">
                         <template v-if="column.key === 'action'">
                             <a-space>
@@ -101,7 +102,7 @@
             </a-form>
 
             <a-flex align="center" justify="end" style="margin-top: 16px" gap="16">
-                <a-button @click="showEditTagModal = false">取消</a-button>
+                <a-button @click="showEditGroupModal = false">取消</a-button>
                 <a-button type="primary" @click="handleSumbit">提交</a-button>
             </a-flex>
         </a-modal>
@@ -159,7 +160,6 @@ const selectedGroupId = ref('labelGroup_new_TsDhjg')
 const selectedGroupTitle = ref('')
 
 const selectedTagId = ref('')
-const selectedTagTitleOld = ref('')
 const selectedTagTitle = ref('')
 
 const editTagList = ref([])
@@ -169,12 +169,12 @@ const newTagList = ref([''])
 // 数据展示
 const columns = [
     { title: '标签组名称', dataIndex: 'title', key: 'title' },
-    { title: '操作', key: 'action', width: 120 },
+    { title: '操作', key: 'action', width: 240 },
 ]
 
 const tagColumns = [
     { title: '标签名称', dataIndex: 'title', key: 'title' },
-    { title: '操作', key: 'action', width: 120 },
+    { title: '操作', key: 'action', width: 225 },
 ]
 
 // 数据获取

@@ -46,6 +46,10 @@
 
 ### 获取对象存储服务信息
 
+**当前仅支持S3协议的对象存储服务，`阿里云OSS`、`腾讯云COS`等均不支持。**
+**推荐使用 [Cloudflare R2](https://www.cloudflare.com/products/cloudflare-r2/) 或 [MinIO](https://min.io/)**
+**如需使用其他对象存储服务，请自行修改 `./server/utils/os_connect.js`**
+
 1. 在对象存储服务提供商处注册或登录
 2. 创建一个存储桶，并获取以下信息：
     - 存储桶名称

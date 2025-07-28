@@ -8,8 +8,11 @@ async function getResources(req, res) {
     let resourceList = [];
     try {
         const publicResources = mongoose.connection.db.collection('publicResources');
-        resourceList = await publicResources.find().toArray();
-        // console.log(resourceList)
+        const tempList = await publicResources.find().toArray();
+        resourceList = tempList.map(item => {
+            const { fileName, ...rest } = item;
+            return rest;
+        })
     } catch (err) {
         console.error("[数据库] - 公共资源获取失败:", err);
         return res.status(500).send({
@@ -37,7 +40,7 @@ async function getResources(req, res) {
         }else {
             // 若有多个筛选条件，则返回同时满足所有条件的资源
             const result = resourceList.filter(item => {
-                return filterArr.every(tag => item.tag.includes(tag))
+                return filterArr.every(tag => item.tags.includes(tag))
             })
             res.status(200).send({
                 code: 200,

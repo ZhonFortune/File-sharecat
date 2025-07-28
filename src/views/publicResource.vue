@@ -58,7 +58,7 @@
                 <a-card-meta :title="Item.title" :description="Item.desc"
                   style="text-align: left; margin-bottom: 40px;" />
                 <a-flex align="center" style="margin-bottom: 15px;">
-                  <a-tag v-for="tag in Item.tag" :key="tag" :color="tagProps.color">{{ tag }}</a-tag>
+                  <a-tag v-for="tag in Item.tags" :key="tag" :color="tagProps.color">{{ tag }}</a-tag>
                 </a-flex>
                 <a-flex>
                   <a-button type="default" size="small" style="width: 100%; font-size: 0.8rem;"
@@ -80,7 +80,7 @@
         <h3 style="margin-top: 40px; font-size: 1.2rem;">{{ currentItem.title }}</h3>
         <p style="margin-top: 5px; font-size: 0.8rem; color: #999">{{ currentItem.desc }}</p>
         <a-flex style="margin-top: 50px; margin-bottom: 25px;" wrap>
-          <a-tag v-for="tag in currentItem.tag" :key="tag">{{ tag }}</a-tag>
+          <a-tag v-for="tag in currentItem.tags" :key="tag">{{ tag }}</a-tag>
         </a-flex>
         <a-flex vertical justify="center" align="flex-start" style="margin-bottom: 5px;">
           <a-span style="color: gray; font-size: 0.8rem;">更新时间：{{ currentItem.time }}</a-span>
