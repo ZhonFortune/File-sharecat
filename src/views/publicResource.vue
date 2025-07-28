@@ -64,7 +64,10 @@
                   <a-button type="default" size="small" style="width: 100%; font-size: 0.8rem;"
                     @click="itemDetail(Item)">详细</a-button>
                   <a-button type="primary" size="small"
-                    style="width: 100%; margin-left: 10px; font-size: 0.8rem">下载</a-button>
+                    style="width: 100%; margin-left: 10px; font-size: 0.8rem" @click="downloadFile(Item)"
+                  >
+                    下载
+                  </a-button>
                 </a-flex>
               </a-card>
             </div>
@@ -86,7 +89,9 @@
           <a-span style="color: gray; font-size: 0.8rem;">更新时间：{{ currentItem.time }}</a-span>
           <a-span style="color: gray; font-size: 0.8rem;">大小：{{ currentItem.size }}</a-span>
         </a-flex>
-        <a :href="currentItem.download" target="_blank">下载资源 - {{ currentItem.title }} - {{ currentItem.size }}</a>
+        <a-button type="link" @click="downloadFile(currentItem)"
+          style="padding: 0;"
+        >下载资源 - {{ currentItem.title }} - {{ currentItem.size }}</a-button>
       </div>
     </a-modal>
   </a-flex>
@@ -100,6 +105,7 @@ import BackTop from '@/components/BackTop.vue';
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { tagProps } from 'ant-design-vue/es/tag';
 import axios from 'axios';
+import { message } from 'ant-design-vue';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = `${BACKEND_URL}/api/v1`
@@ -214,6 +220,29 @@ const handleSearch = () => {
   }
 }
 
+// 下载文件
+const downloadFile = (item) => {
+  const hide = message.loading('正在下载...', 0)
+  
+  const modal = 'public'
+  axios.post(`${API_URL}/resource/reqdownload`, {
+    modal: modal,
+    key: item.filekey
+  }).then((res) => {
+    if( res.data.code == 200 ) {
+      const downloadUrl = `${API_URL}/resource/download?token=${res.data.data.token}&title=${item.title}`
+      window.location.href = downloadUrl
+    } else {
+      message.error('请求下载失败: ' + res.data.msg)
+    }
+  }).catch((error) => {
+    console.log(error)
+  }).finally(() => {
+    hide()
+    message.success('完成')
+  })
+}
+
 // 挂载初始化
 onMounted(() => {
   getOptionGroup()
@@ -317,7 +346,10 @@ onUnmounted(() => {
   }
 
   .content {
-    margin-right: 20px;
+    margin: 0px auto;
+    margin-top: 30px;
+    /* padding: 20px 40px; */
+    /* margin-right: 20px; */
   }
 }
 </style>

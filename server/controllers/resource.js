@@ -1,5 +1,10 @@
 const { mongoose} = require('../utils/db_connect');
+const { objectGet } = require('../utils/os_connect');
+const CryptoJS = require('crypto-js');
+const path = require('path');
+const mime = require('mime-types');
 
+// 获取公共资源
 async function getResources(req, res) {
     const filter = req.query.filter;
     const type = req.query.type;
@@ -64,6 +69,7 @@ async function getResources(req, res) {
     }
 }
 
+// 获取私密资源
 async function getTokenResource(req, res) {
     const token = req.query.token;
 
@@ -119,6 +125,7 @@ async function getTokenResource(req, res) {
     });
 }
 
+// 获取资源数量
 async function getResourceNum(req, res) {
     // 获取资源数量
     try {
@@ -142,8 +149,120 @@ async function getResourceNum(req, res) {
     }
 }
 
+// 下载资源
+let DOWNLOAD_TOKENS = {};
+function generateDownloadToken() {
+    const raw = CryptoJS.MD5(Date.now().toString() + Math.random().toString()).toString(); 
+    const base = raw.substring(0, 25); 
+    const groups = base.match(/.{1,5}/g); 
+    return groups.join('-'); 
+}
+async function handlePushDownloadToken(req, res) {
+    const { key, modal } = req.body;
+
+    if (!key || !modal) {
+        return res.status(400).send({
+            code: 400,
+            msg: '请求参数错误'
+        });
+    }
+
+    let resource;
+
+    try {
+        const collectionName = modal === 'public' ? 'publicResources'
+            : modal === 'token' ? 'tokenResources'
+                : null;
+
+        if (!collectionName) {
+            return res.status(400).send({
+                code: 400,
+                msg: '请求参数错误'
+            });
+        }
+
+        const collection = mongoose.connection.db.collection(collectionName);
+        const query = modal === 'public' ? { filekey: key } : { token: key };
+        const result = await collection.findOne(query);
+
+        if (!result) {
+            return res.status(404).send({
+                code: 404,
+                msg: '资源不存在'
+            });
+        }
+
+        resource = result;
+    } catch (err) {
+        console.error("[下载文件] - 资源查询失败:", err);
+        return res.status(500).send({
+            code: 500,
+            msg: '服务器错误'
+        });
+    }
+
+    const fileName = resource.fileName;
+
+    const token = generateDownloadToken();
+    DOWNLOAD_TOKENS[token] = {
+        fileName,
+        modal,
+        expires: Date.now() + 60 * 1000 // 1分钟有效
+    };
+
+    console.log(`[下载文件] - 请求下载, 返回令牌 ${token}`);
+    res.send({
+        code: 200,
+        msg: '成功',
+        data: {
+            token
+        }
+    });
+}
+
+// 下载器
+async function handleDownload(req, res) {
+    const downloadToken = req.query.token;
+    const title = req.query.title || 'file';
+
+    if (!downloadToken) {
+        return res.status(401).send({ code: 401, msg: '请求参数缺失' });
+    }
+
+    if (!DOWNLOAD_TOKENS[downloadToken]) {
+        return res.status(401).send({ code: 401, msg: '下载链接不存在' });
+    }
+
+    const tokenData = DOWNLOAD_TOKENS[downloadToken];
+    if (Date.now() > tokenData.expires) {
+        delete DOWNLOAD_TOKENS[downloadToken];
+        console.log(`[下载文件] - 验证令牌 ${downloadToken} 失败, 该令牌已失效被清理`);
+        return res.status(401).send({ code: 401, msg: '下载链接已失效' });
+    }
+
+    const fileName = tokenData.fileName;
+    const fileExt = path.extname(fileName);
+    const newFileName = title + fileExt;
+
+    let file;
+    try {
+        file = await objectGet(fileName);
+    } catch (err) {
+        return res.status(404).send({ code: 404, msg: '文件不存在' });
+    }
+
+    console.log(`[下载文件] - 验证令牌 ${downloadToken} 成功`);
+    delete DOWNLOAD_TOKENS[downloadToken];
+    
+    res.set('Content-Type', mime.lookup(fileName) || 'application/octet-stream');
+    res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(newFileName)}"`);
+    res.send(file);
+}
+
 module.exports = {
     getResources,
     getTokenResource,
-    getResourceNum
+    getResourceNum,
+    handlePushDownloadToken,
+    handleDownload,
 }

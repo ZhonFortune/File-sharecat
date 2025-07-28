@@ -12,13 +12,12 @@
         <Header />
       </a-layout-header>
 
-      <a-layout-content :style="{ minHeight: '100vh' }">
-        <Debug id="Debug" :style="debugStyle" display="none" />
+      <a-layout-content class="content" :style="{ minHeight: '100vh', maxWidth: '100vw'}">
         <router-view />
       </a-layout-content>
 
       <a-layout-footer v-if="!hiddenHeaderAndFooter"
-        :style="{ background: 'rgb(242 242 242)', padding: '40px 0px', marginTop: '40px' }">
+        :style="{ background: 'rgb(242 242 242)', padding: '40px 0px', marginTop: '40px', width: '100vw'}">
         <Footer />
         <!-- <Button type="primary" @click='test'>Primary Button</Button> -->
       </a-layout-footer>
@@ -27,10 +26,9 @@
 </template>
 
 <script setup>
-import { ref, computed , watch} from 'vue'
+import { ref, watch} from 'vue'
 import { useRoute } from 'vue-router'
 import Header from '@/components/Header.vue'
-import Debug from '@/components/Debug.vue'
 import Footer from '@/components/Footer.vue'
 
 const hiddenHeaderAndFooter = ref(false)
@@ -41,13 +39,12 @@ watch(route, (to) => {
   hiddenHeaderAndFooter.value = to.meta.hiddenLayout === true
 }, { immediate: true }) // 页面初次加载也触发一次
 
-const debugStatus = ref(false)
-const debugStyle = computed(() => {
-  return {
-    display: debugStatus.value ? 'block' : 'none'
-  }
-})
-
 </script>
 
-<style scoped></style>
+<style scoped>
+@media screen and (max-width: 768px) {
+  .content {
+    margin: 0px auto;
+  }
+}
+</style>

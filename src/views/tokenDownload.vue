@@ -1,5 +1,6 @@
 <template>
-  <a-flex style="padding: 20px 40px; padding-bottom: 0px; height: 100vh" gap="large">
+  <!-- 正常显示 -->
+  <a-flex v-if="!isMobile" style="padding: 20px 40px; padding-bottom: 0px; height: 100vh" gap="large">
     <!-- 左侧输入区域 -->
     <a-flex vertical style="width: 280px;" justify="flex-start">
       <a-typography-title :level="5" style="text-align: left; margin-top: 150px;" >请输入TOKEN</a-typography-title>
@@ -54,6 +55,60 @@
     </a-flex>
   </a-flex>
 
+  <!-- 移动端显示 -->
+  <a-flex v-else style="padding: 20px 20px; padding-bottom: 0px; height: 100vh" gap="large">
+    <!-- 输入区域 -->
+    <a-flex vertical style="width: 100%;" justify="flex-start" v-if="!resource">
+      <a-typography-title :level="5" style="text-align: left; margin-top: 150px;" >请输入TOKEN</a-typography-title>
+      <a-input
+        v-model:value="inputToken"
+        placeholder="输入访问TOKEN"
+        allow-clear
+        style="width: 100%; margin-top: 40px; height: 40px; border-radius: 15px;"
+      />
+      <a-button type="primary" style="margin-top: 10px; height: 30px;" @click="submitToken">
+        获取
+      </a-button>
+      <a-button type="link" style="padding: 10px 0; font-size: 0.8rem; text-align: left;"
+       @click="openFAQdialog">
+      如何获取TOKEN?</a-button>
+    </a-flex>
+
+    <!-- 内容 -->
+    <a-flex
+      v-else
+      align="center"
+      justify="center"
+      :style="{ background: '#fff', borderRadius: '15px'}"
+    >
+      <a-card v-if="resource" class="content-card" :bordered="true">
+        <a-flex vertical align="flex-start">
+          <h3 style="font-size: 1.2rem;">{{ resource.title }}</h3>
+          <p style="margin-top: 5px; font-size: 0.8rem; color: #999; text-align: left;">{{ resource.desc }}</p>
+
+          <a-flex style="margin-top: 30px; margin-bottom: 20px;" wrap>
+            <a-tag v-for="tag in resource.tag" :key="tag">{{ tag }}</a-tag>
+          </a-flex>
+
+          <a-flex vertical justify="center" align="flex-start" style="margin-bottom: 5px;">
+            <a-span style="color: gray; font-size: 0.8rem; padding: 0;"
+            >更新时间：{{ resource.time }}</a-span>
+            <a-span style="color: gray; font-size: 0.8rem; padding: 0;"
+            >过期时间：{{ resource.timeout }}</a-span>
+            <a-span style="color: gray; font-size: 0.8rem; padding: 0;">大小：{{ resource.size }}</a-span>
+          </a-flex>
+
+          <a-button type="primary" style="margin-top: 20px; height: 40px;" @click="downloadResource(resource.download)">
+            下载资源 {{ resource.title }} - {{ resource.size }}
+          </a-button>
+        </a-flex>
+      </a-card>
+
+      <a-empty v-else :description="emptyDescription" />
+
+    </a-flex>
+  </a-flex>
+
   <a-modal :open="faqVisible" title="如何获取 TOKEN" @cancel="closeFAQdialog">
     <template #default>
         <p>本项目为文件分享工具,内置公共资源模块和私人访问模块,私人访问模块需要TOKEN来打开特定的资源.</p>
@@ -72,9 +127,11 @@
 </template>
 
 <script setup lang="js">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted} from 'vue'
 import axios from 'axios'
 import { message } from 'ant-design-vue'
+
+const isMobile = ref(false)
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = `${BACKEND_URL}/api/v1`
@@ -83,8 +140,6 @@ const resource = ref(null)
 const faqVisible = ref(false)
 const inputToken = ref('')
 const emptyDescription = ref('请输入TOKEN')
-
-// console.log(resource.value)
 
 const openFAQdialog = () => {
   faqVisible.value = true
@@ -122,6 +177,21 @@ const submitToken = () => {
     console.log(err)
   })
 }
+
+// 监听窗口大小变化
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+
 </script>
 
 <style scoped>
@@ -132,4 +202,5 @@ const submitToken = () => {
   height: auto;
   border: none;
 }
+
 </style>

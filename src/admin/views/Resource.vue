@@ -116,8 +116,24 @@
 
                 <!-- 提交按钮 -->
                 <a-flex align="center" justify="center" style="margin-top: 40px;">
-                    <a-button type="primary" @click="submitUploadResource" style="padding: 0 40px; font-size: 0.9rem;"
-                        :loading="submitBtnLoading">提交</a-button>
+                    <a-button
+                        type="primary"
+                        @click="submitUploadResource"
+                        style="padding: 0 40px; font-size: 0.9rem;"
+                        :loading="submitBtnLoading"
+                        >
+                        <template v-if="submitBtnLoading">
+                            <span v-if="uploadProgress < 100">
+                            已上传 {{ uploadProgress }}%
+                            </span>
+                            <span v-else>
+                            正在保存
+                            </span>
+                        </template>
+                        <template v-else>
+                            提交
+                        </template>
+                    </a-button>
                 </a-flex>
             </template>
         </a-tab-pane>
@@ -171,6 +187,7 @@ const activeTab = ref('public')
 const loading = ref(false)
 const editLoading = ref(false)
 const submitBtnLoading = ref(false)
+const uploadProgress = ref(0)
 
 const publicData = ref([])
 const tokenData = ref([])
@@ -318,7 +335,11 @@ const submitUploadResource = async () => {
     }
 
     const fileMeta = file.originFileObj
-    const size = (fileMeta.size / 1024 / 1024).toFixed(2) + 'MB'
+    let size;
+    if(fileMeta.size < 1024 * 1024) 
+        size = (fileMeta.size / 1024).toFixed(2) + 'KB'
+    else 
+        size = (fileMeta.size / 1024 / 1024).toFixed(2) + 'MB'
 
     const currentTime = new Date()
     const year = currentTime.getFullYear()
@@ -337,10 +358,15 @@ const submitUploadResource = async () => {
     formData.append('file', fileMeta);
 
     submitBtnLoading.value = true
+    uploadProgress.value = 0
     if (model === 'public') {
         try {
             const res = await axios.post(`${BACKEND_URL}/api/v1/admin/oper/resource/upload`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+                headers: { 'Content-Type': 'multipart/form-data' },
+                onUploadProgress: (progressEvent) => {
+                    const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    uploadProgress.value = percent
+                }
             })
             if (res.data?.code === 200) {
                 message.success('上传成功')
@@ -353,6 +379,7 @@ const submitUploadResource = async () => {
             message.error('请求出错')
         } finally {
             submitBtnLoading.value = false
+            uploadProgress.value = 0
         }
     } else {
         message.error('暂不支持私密资源上传')

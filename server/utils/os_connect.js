@@ -55,7 +55,7 @@ async function objectGet(fileName) {
 
     try {
         const result = await s3Client.getObject(params).promise();
-        return result;
+        return result.Body;
     } catch (err) {
         console.error(`[对象存储] - 文件: ${fileName} 获取失败:`, err.message);
         throw err;

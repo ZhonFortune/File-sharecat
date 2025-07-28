@@ -3,7 +3,7 @@
 const cryptoJs = require('crypto-js');
 const mime = require('mime-types');
 const { mongoose } = require('../../utils/db_connect');
-const { objectUpload, objectGet, objectDelete } = require('../../utils/os_connect');
+const { objectUpload, objectDelete } = require('../../utils/os_connect');
 const jwt = require('jsonwebtoken');
 
 const ObjectId = mongoose.Types.ObjectId;
@@ -135,7 +135,7 @@ async function publicResourceUpload(req, res) {
 
     const logAndRespond = (success, successMsg, failMsg, filekey) => {
         if (success) {
-            console.log(`[管理员操作] - 公共资源上传成功: ${filekey ? filekey : ''}`);
+            console.log(`[管理员操作] - 公共资源 ${filekey ? filekey : ''} 上传成功`);
             return res.status(200).json({ code: 200, message: successMsg });
         } else {
             console.log(`[管理员操作] - 公共资源上传失败`);
@@ -161,7 +161,7 @@ async function publicResourceUpload(req, res) {
         const now = new Date();
         const tagToString = tags.join('');
         const random = Math.random().toString(36).substring(2, 15);
-        const filekey = cryptoJs.MD5(tagToString + now + size + desc + tagToString + time + title + random).toString();
+        const filekey = cryptoJs.MD5('public' + tagToString + now + size + desc + tagToString + time + title + random).toString();
         const os_key = cryptoJs.MD5(filekey + SECRET_KEY).toString();
         const fileKeyName = `${os_key}.${fileExt}`
 
@@ -176,11 +176,15 @@ async function publicResourceUpload(req, res) {
             fileName: fileKeyName,
         };
 
+        const start = new Date().getTime();
         // 上传对象存储，第二个参数传入 buffer
         const uploadResult = await objectUpload(fileKeyName, fileBuffer, fileMime);
         if (!uploadResult) {
             return logAndRespond(false, '添加公共资源失败', '添加公共资源失败');
         }
+        const end = new Date().getTime();
+        const resumeTime = ( end - start ) / 1000;
+        console.log(`[管理员操作] - 文件 ${filekey} 已保存, 耗时: ${resumeTime}s`);
 
         const result = await db.collection('publicResources').insertOne(latestData);
         return logAndRespond(
@@ -228,18 +232,18 @@ async function publicResourceDelete(req, res) {
         // 删除对象存储
         const deleteResult = await objectDelete(fileName);
         if (!deleteResult) {
-            console.error(`[管理员操作] - 删除资源: ${fileKey} 失败`);
+            console.error(`[管理员操作] - 删除资源 ${fileKey} 失败`);
             return res.status(500).json({ code: 500, message: '删除资源失败' });
         }
 
         // 删除数据库
         const deleteDBResult = await db.collection('publicResources').deleteOne({ _id: new ObjectId(key) });
         if (!deleteDBResult.acknowledged) {
-            console.error(`[管理员操作] - 删除资源: ${fileKey} 失败`);
+            console.error(`[管理员操作] - 删除资源 ${fileKey} 失败`);
             return res.status(500).json({ code: 500, message: '删除资源失败' });
         }
 
-        console.log(`[管理员操作] - 删除资源: ${fileKey} 成功`);
+        console.log(`[管理员操作] - 删除资源 ${fileKey} 成功`);
         return res.status(200).json({ code: 200, message: '删除资源成功' });
     }catch (error) {
         console.error('[后台] - 公共资源删除异常', error);
