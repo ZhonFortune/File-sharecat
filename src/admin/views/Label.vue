@@ -7,9 +7,13 @@
             </a-button>
         </a-flex>
 
-        <a-table :columns="columns" :data-source="labelsList" :rowKey="record => record._id"
-            :style="{ marginTop: '10px' }" :pagination="{ pageSize: 5 }"
-            :expandable="{ rowExpandable: record => record.options && record.options.length > 0 }">
+        <a-table 
+            :columns="columns" :data-source="labelsList" :rowKey="record => record._id"
+            :style="{ marginTop: '10px'}" :pagination="{ pageSize: 5 }" 
+            :scroll="{ y: 'calc(100vh - 350px)' }"            
+            :expandable="{ rowExpandable: record => record.options && record.options.length > 0 }"
+            v-if="labelsList.length > 0 && !loading"
+        >
             <!-- 操作列插槽 -->
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
@@ -27,7 +31,7 @@
             <!-- 展开子表格 -->
             <template #expandedRowRender="{ record }">
                 <a-table :columns="tagColumns" :data-source="record.options" :rowKey="tag => tag.id" :pagination="false"
-                    size="small">
+                    size="small" :scroll="{ y: 'calc(100vh - 470px)' }">
                     <template #bodyCell="{ column, record: tag }">
                         <template v-if="column.key === 'action'">
                             <a-space>
@@ -41,6 +45,9 @@
             </template>
         </a-table>
 
+        <a-flex v-else align="center" justify="center" style="height: calc(100vh - 350px)">
+            <a-empty description="暂无标签" />
+        </a-flex>
         <!-- 新增器 -->
         <a-modal v-model:open="showAddTagModal" :title="modalTitle" :confirmLoading="loading" :footer="null">
             <a-form layout="vertical" style="padding: 20px 20px;">
@@ -101,7 +108,7 @@
             </a-form>
 
             <a-flex align="center" justify="end" style="margin-top: 16px" gap="16">
-                <a-button @click="showEditTagModal = false">取消</a-button>
+                <a-button @click="showEditGroupModal = false">取消</a-button>
                 <a-button type="primary" @click="handleSumbit">提交</a-button>
             </a-flex>
         </a-modal>
@@ -144,7 +151,7 @@ import CryptoJS from 'crypto-js'
 import { message, Modal } from 'ant-design-vue'
 import { PlusCircleOutlined } from '@ant-design/icons-vue'
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 const API_URL = BACKEND_URL + '/api/v1'
 
 const labelsList = ref([])
@@ -159,7 +166,6 @@ const selectedGroupId = ref('labelGroup_new_TsDhjg')
 const selectedGroupTitle = ref('')
 
 const selectedTagId = ref('')
-const selectedTagTitleOld = ref('')
 const selectedTagTitle = ref('')
 
 const editTagList = ref([])
@@ -169,12 +175,12 @@ const newTagList = ref([''])
 // 数据展示
 const columns = [
     { title: '标签组名称', dataIndex: 'title', key: 'title' },
-    { title: '操作', key: 'action', width: 120 },
+    { title: '操作', key: 'action', width: 240 },
 ]
 
 const tagColumns = [
     { title: '标签名称', dataIndex: 'title', key: 'title' },
-    { title: '操作', key: 'action', width: 120 },
+    { title: '操作', key: 'action', width: 225 },
 ]
 
 // 数据获取

@@ -1,10 +1,16 @@
-# ⚙️ 部署教程
+<div align="center">
+    <h1>部署文档</h1>
+    <a href="https://railway.com/deploy/HQIhln?referralCode=YFC8-i" target="_blank" rel="noopener noreferrer">
+  <img src="https://railway.com/button.svg" alt="Deploy on Railway" width="auto" height="30px" style="vertical-align: middle;" />
+</a>
+
+</div>
 
 <br>
 
 ## 环境变量配置
 
-本地部署时需修改 `.env` 以配置环境变量，Railway 部署时需在 `Settings`/`Environment Variables` 中配置环境变量。
+本地部署时需修改 `.env` 以配置环境变量，Railway/Vercel 部署时需在 `Settings`/`Environment Variables` 中配置环境变量。
 
 | 变量名             | 描述                                                                 | 示例值                                                         | 必填 |
 |--------------------|----------------------------------------------------------------------|-----------------------------------------------------------------|------|
@@ -40,6 +46,10 @@
 
 ### 获取对象存储服务信息
 
+**当前仅支持S3协议的对象存储服务，`阿里云OSS`、`腾讯云COS`等均不支持。**
+**推荐使用 [Cloudflare R2](https://www.cloudflare.com/products/cloudflare-r2/) 或 [MinIO](https://min.io/)**
+**如需使用其他对象存储服务，请自行修改 `./server/utils/os_connect.js`**
+
 1. 在对象存储服务提供商处注册或登录
 2. 创建一个存储桶，并获取以下信息：
     - 存储桶名称
@@ -60,15 +70,19 @@
 <br>
 
 ## 🚀 部署
+推荐先部署后端再部署(构建)前端
 
-### Railway
+<br>
 
-1. 在 [Railway](https://railway.app/) 注册或登录
-2. 点击 `New Project` 按钮
-3. 选择 `Node.js`，并点击 `Create` 按钮
-4. 在 `Settings`/`Environment Variables` 中添加环境变量
-5. 点击 `Deploy` 按钮
-6. 或点击下方按钮快速部署
+### Railway (后端)
+
+1. FORK 项目
+2. 在 [Railway](https://railway.app/) 注册或登录
+3. 点击 `New Project` 按钮
+4. 选择 `Node.js`，并点击 `Create` 按钮
+5. 在 `Settings`/`Environment Variables` 中添加环境变量
+6. 点击 `Deploy` 按钮
+6. 或点击下方按钮快速部署 (无需FORK)
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/HQIhln?referralCode=YFC8-i)
 
 <br>
@@ -97,7 +111,5 @@ npm i -g file-sharecat
 # 启动项目
 fsc-server
 ```
-
-<br>
 
 

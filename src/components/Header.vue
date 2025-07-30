@@ -27,7 +27,7 @@
     v-else
     justify="space-between"
     align="center"
-    :style="{ width: '100%', background: '#fff', padding: '0px 20px'}"
+    :style="{ width: '100%', background: '#fff', padding: 'env(safe-area-inset-top, 10px) 20px 10px'}"
   >
     <div style="width: 32px;" />
     <a-text class="mobile-title">FILE-SHARECAT</a-text>
@@ -134,6 +134,7 @@ onUnmounted(() => {
 }
 
 .mobile-title {
+  line-height: auto;
   font-size: 1rem;
   font-weight: 500;
   margin: 0 auto;
