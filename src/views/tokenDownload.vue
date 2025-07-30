@@ -31,19 +31,17 @@
           <p style="margin-top: 5px; font-size: 0.8rem; color: #999; text-align: left;">{{ resource.desc }}</p>
 
           <a-flex style="margin-top: 30px; margin-bottom: 20px;" wrap>
-            <a-tag v-for="tag in resource.tag" :key="tag">{{ tag }}</a-tag>
+            <a-tag v-for="tag in resource.tags" :key="tag">{{ tag }}</a-tag>
           </a-flex>
 
           <a-flex vertical justify="center" align="flex-start" style="margin-bottom: 5px;">
             <a-span style="color: gray; font-size: 0.8rem; padding: 0;"
-            >更新时间：{{ resource.time }}</a-span>
-            <a-span style="color: gray; font-size: 0.8rem; padding: 0;"
-            >过期时间：{{ resource.timeout }}</a-span>
+            >上传时间：{{ resource.time }}</a-span>
             <a-span style="color: gray; font-size: 0.8rem; padding: 0;">大小：{{ resource.size }}</a-span>
           </a-flex>
 
           <a-tooltip :title=" '点击下载' + ' ' + resource.title + ' ( ' + resource.size + ' )'" placement="bottom">
-            <a-button type="primary" style="margin-top: 20px; height: 40px;" @click="downloadResource(resource.download)">
+            <a-button type="primary" style="margin-top: 20px; height: 40px;" @click="downloadFile(resource)">
               下载资源
             </a-button>
           </a-tooltip>
@@ -87,18 +85,16 @@
           <p style="margin-top: 5px; font-size: 0.8rem; color: #999; text-align: left;">{{ resource.desc }}</p>
 
           <a-flex style="margin-top: 30px; margin-bottom: 20px;" wrap>
-            <a-tag v-for="tag in resource.tag" :key="tag">{{ tag }}</a-tag>
+            <a-tag v-for="tag in resource.tags" :key="tag">{{ tag }}</a-tag>
           </a-flex>
 
           <a-flex vertical justify="center" align="flex-start" style="margin-bottom: 5px;">
             <a-span style="color: gray; font-size: 0.8rem; padding: 0;"
-            >更新时间：{{ resource.time }}</a-span>
-            <a-span style="color: gray; font-size: 0.8rem; padding: 0;"
-            >过期时间：{{ resource.timeout }}</a-span>
+            >上传时间：{{ resource.time }}</a-span>
             <a-span style="color: gray; font-size: 0.8rem; padding: 0;">大小：{{ resource.size }}</a-span>
           </a-flex>
 
-          <a-button type="primary" style="margin-top: 20px; height: 40px;" @click="downloadResource(resource.download)">
+          <a-button type="primary" style="margin-top: 20px; height: 40px;" @click="downloadFile(resource)">
             下载资源 {{ resource.title }} - {{ resource.size }}
           </a-button>
         </a-flex>
@@ -171,10 +167,33 @@ const submitToken = () => {
 
     message.success('资源已成功加载')
 
-    resource.value = res.data.data[0]
+    resource.value = res.data.data
 
   }).catch((err) => {
     console.log(err)
+  })
+}
+
+// 下载资源
+const downloadFile = (item) => {
+  const hide = message.loading('正在下载...', 0)
+  
+  const modal = 'token'
+  axios.post(`${API_URL}/resource/reqdownload`, {
+    modal: modal,
+    key: item.token
+  }).then((res) => {
+    if( res.data.code == 200 ) {
+      const downloadUrl = `${API_URL}/resource/download?token=${res.data.data.token}&title=${item.title}`
+      window.location.href = downloadUrl
+    } else {
+      message.error('请求下载失败: ' + res.data.msg)
+    }
+  }).catch((error) => {
+    console.log(error)
+  }).finally(() => {
+    hide()
+    message.success('完成')
   })
 }
 

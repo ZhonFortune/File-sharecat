@@ -7,10 +7,13 @@
             </a-button>
         </a-flex>
 
-        <a-table :columns="columns" :data-source="labelsList" :rowKey="record => record._id"
+        <a-table 
+            :columns="columns" :data-source="labelsList" :rowKey="record => record._id"
             :style="{ marginTop: '10px'}" :pagination="{ pageSize: 5 }" 
             :scroll="{ y: 'calc(100vh - 350px)' }"            
-            :expandable="{ rowExpandable: record => record.options && record.options.length > 0 }">
+            :expandable="{ rowExpandable: record => record.options && record.options.length > 0 }"
+            v-if="labelsList.length > 0 && !loading"
+        >
             <!-- 操作列插槽 -->
             <template #bodyCell="{ column, record }">
                 <template v-if="column.key === 'action'">
@@ -42,6 +45,9 @@
             </template>
         </a-table>
 
+        <a-flex v-else align="center" justify="center" style="height: calc(100vh - 350px)">
+            <a-empty description="暂无标签" />
+        </a-flex>
         <!-- 新增器 -->
         <a-modal v-model:open="showAddTagModal" :title="modalTitle" :confirmLoading="loading" :footer="null">
             <a-form layout="vertical" style="padding: 20px 20px;">

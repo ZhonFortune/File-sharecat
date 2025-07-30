@@ -86,7 +86,7 @@
           <a-tag v-for="tag in currentItem.tags" :key="tag">{{ tag }}</a-tag>
         </a-flex>
         <a-flex vertical justify="center" align="flex-start" style="margin-bottom: 5px;">
-          <a-span style="color: gray; font-size: 0.8rem;">更新时间：{{ currentItem.time }}</a-span>
+          <a-span style="color: gray; font-size: 0.8rem;">上传时间：{{ currentItem.time }}</a-span>
           <a-span style="color: gray; font-size: 0.8rem;">大小：{{ currentItem.size }}</a-span>
         </a-flex>
         <a-button type="link" @click="downloadFile(currentItem)"

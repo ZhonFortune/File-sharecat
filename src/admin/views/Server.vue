@@ -35,8 +35,8 @@ const basic = reactive({
 })
 
 const db = reactive({
-  mongo: 'N/A',
-  objectStore: 'N/A',
+  mongo: '**不可见',
+  objectStore: '**不可见',
 })
 </script>
 

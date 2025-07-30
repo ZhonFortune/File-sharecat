@@ -44,8 +44,8 @@ let tokenResourceNum = ref(0);
 
 function getResourceNum() {
   axios.get(API_URL + '/resource/getnum').then((response) => {
-    publicResourceNum.value = response.data.data.publicNum;
-    tokenResourceNum.value = response.data.data.tokenNum;
+    publicResourceNum.value = response.data.data.publicNum ? response.data.data.publicNum : '无数据';
+    tokenResourceNum.value = response.data.data.tokenNum ? response.data.data.tokenNum : '无数据';
   }).catch((error) => {
     console.error(error);
   });
@@ -53,7 +53,7 @@ function getResourceNum() {
 
 function getLabelNum() {
   axios.get(API_URL + '/label/getnum').then((response) => {
-    labelNum.value = response.data.data.groupCount + ' / ' + response.data.data.labelCount;
+    labelNum.value = response.data.data.groupCount && response.data.data.labelCount ? response.data.data.groupCount + ' / ' + response.data.data.labelCount : '无数据';
   }).catch((error) => {
     console.error(error);
   });
@@ -64,6 +64,7 @@ onMounted(() => {
   getLabelNum()
 })
 const announcements = [
+  `1.0.0 - 🎉 完成项目,发布正式版`,
   `Beta 0.3.0 - 💿 完成公共资源模块下载功能`,
   `Beta 0.2.0 - ✅ 完成公共资源面板与资源上传功能`,
   'Beta 0.1.2 - ✅ 完成Railway调试,优化代码',

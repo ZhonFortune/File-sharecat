@@ -80,11 +80,34 @@ async function getTokenResource(req, res) {
         });
     }
 
-    // 从数据库中获取资源
-    let resourceList = [];
+    // 直接从数据库中获取资源
+    let resource = []
     try {
         const tokenResources = mongoose.connection.db.collection('tokenResources');
-        resourceList = await tokenResources.find().toArray();
+        // 根据token查找资源
+        const result = await tokenResources.find({ token }).toArray();
+        
+        // 检查有无该资源
+        if (result.length === 0) {
+            return res.status(200).json({
+                code: 200,
+                msg: '资源不存在',
+            });
+        }
+
+        // 检查是否存在同一个 token的两个以上资源
+        if (result.length > 1) {
+            return res.status(500).json({
+                code: 500,
+                msg: '资源本体出现错误',
+            })
+        }
+
+        // 排除fileName,filekey
+        resource = result.map(item => {
+            const { fileName, filekey, ...rest } = item;
+            return rest;
+        })
     }catch (err) {
         console.error("[数据库] - 私密资源获取失败:", err);
         return res.status(500).send({
@@ -93,19 +116,24 @@ async function getTokenResource(req, res) {
         });
     }
 
-    const result = resourceList.filter(item => item.token === token);
-
-    if (result.length === 0) {
-        return res.status(200).json({
-            code: 200,
-            msg: '资源不存在',
-        });
-    }
-
     // 检查是否过期 校验时间戳
     const now = new Date();
     const nowStr = now.getTime().toString();
-    const timeout = result[0].timeout;
+    const timeout = resource[0].timeout;
+
+    // 排除timeout
+    const returnData = resource.map(item => {
+        const { timeout, ...rest } = item;
+        return rest;
+    })
+
+    if (!timeout || timeout === '' || timeout === null || timeout === undefined) {
+        return res.status(200).json({
+            code: 200,
+            msg: '资源获取成功',
+            data: returnData[0]
+        })
+    }
 
     // 转换为时间戳
     const timeoutDate = new Date(timeout);
@@ -121,7 +149,7 @@ async function getTokenResource(req, res) {
     return res.status(200).json({
         code: 200,
         msg: '资源获取成功',
-        data: result
+        data: returnData[0]
     });
 }
 
@@ -159,7 +187,6 @@ function generateDownloadToken() {
 }
 async function handlePushDownloadToken(req, res) {
     const { key, modal } = req.body;
-
     if (!key || !modal) {
         return res.status(400).send({
             code: 400,
@@ -230,7 +257,7 @@ async function handleDownload(req, res) {
     }
 
     if (!DOWNLOAD_TOKENS[downloadToken]) {
-        return res.status(401).send({ code: 401, msg: '下载链接不存在' });
+        return res.status(401).send({ code: 401, msg: '下载链接不存在或已失效' });
     }
 
     const tokenData = DOWNLOAD_TOKENS[downloadToken];
@@ -247,16 +274,16 @@ async function handleDownload(req, res) {
     let file;
     try {
         file = await objectGet(fileName);
+        console.log(`[下载文件] - 验证令牌 ${downloadToken} 成功`);
+        res.set('Content-Type', mime.lookup(fileName) || 'application/octet-stream');
+        res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(newFileName)}"`);
+        res.send(file);
     } catch (err) {
         return res.status(404).send({ code: 404, msg: '文件不存在' });
+    } finally {
+        // 清理下载令牌
+        delete DOWNLOAD_TOKENS[downloadToken];
     }
-
-    console.log(`[下载文件] - 验证令牌 ${downloadToken} 成功`);
-    delete DOWNLOAD_TOKENS[downloadToken];
-    
-    res.set('Content-Type', mime.lookup(fileName) || 'application/octet-stream');
-    res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(newFileName)}"`);
-    res.send(file);
 }
 
 module.exports = {
