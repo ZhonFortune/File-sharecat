@@ -124,8 +124,11 @@
 
 <script setup lang="js">
 import { ref, onMounted, onUnmounted} from 'vue'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 import { message } from 'ant-design-vue'
+
+const route = useRoute()
 
 const isMobile = ref(false)
 
@@ -195,6 +198,14 @@ const downloadFile = (item) => {
     hide()
     message.success('完成')
   })
+}
+
+// 监听路由是否有?to=参数
+if(route.query.to) {
+  inputToken.value = route.query.to
+  submitToken()
+}else {
+  console.log('没有to参数')
 }
 
 // 监听窗口大小变化

@@ -68,9 +68,9 @@ const menuItem = [
   },
   {
     key: 'tokenDownload',
-    label: '口令下载',
+    label: '私密资源',
     name: 'tokenDownload',
-    path: '/tload'
+    path: '/private'
   }
 ]
 

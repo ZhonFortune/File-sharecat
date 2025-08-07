@@ -30,7 +30,10 @@
             </a-layout-header>
 
             <a-layout-content class="content">
-                <router-view></router-view>
+                <div v-if="pageloading" class="custom-loading-wrapper">
+                    <div class="custom-spinner"></div>
+                </div>
+                <router-view v-else></router-view>
             </a-layout-content>
 
             <a-layout-footer class="footer">
@@ -60,6 +63,7 @@ import { useRouter,useRoute } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+const pageloading = ref(true)
 
 const collapsed = ref(false)
 const selectedKeys = ref(['home'])
@@ -105,6 +109,7 @@ const handleResize = () => {
 const handleSelect = ({ key }) => {
     const item = menuItems.find(i => i.key === key)
     if (item) {
+        pageloading.value = true
         router.push({ name: item.name })
     }
 }
@@ -121,6 +126,16 @@ const updateMenuSelected = (route) => {
   }
 }
 
+// 路由加载
+router.beforeEach((to, from, next) => {
+    pageloading.value = true
+    next()
+})
+
+router.afterEach(() => {
+    pageloading.value = false
+})
+
 watch(
   () => route.name,
   () => updateMenuSelected(route),
@@ -128,6 +143,7 @@ watch(
 )
 
 onMounted(() => {
+    pageloading.value = false
     handleResize()
     window.addEventListener('resize', handleResize)
 })
@@ -174,5 +190,28 @@ onUnmounted(() => {
     padding: 10px 20px;
     text-align: right;
     color: #aaa;
+}
+
+.custom-loading-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 150px 0;
+}
+
+.custom-spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #2b2b2b;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+  box-sizing: border-box;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

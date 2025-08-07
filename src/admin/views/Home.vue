@@ -20,7 +20,7 @@
     </a-row>
 
     <!-- 版本更新日志 -->
-    <a-card title="版本更新日志" style="margin-top: 20px; text-align: left;">
+    <a-card title="版本更新日志" style="margin-top: 20px; text-align: left; max-height: calc(100vh - 450px); overflow-y: auto">
       <a-timeline>
         <a-timeline-item v-for="(item, index) in announcements" :key="index">
           {{ item }}
@@ -64,6 +64,7 @@ onMounted(() => {
   getLabelNum()
 })
 const announcements = [
+  `1.0.1 - 💿 优化UI逻辑，增添功能`,
   `1.0.0 - 🎉 完成项目,发布正式版`,
   `Beta 0.3.0 - 💿 完成公共资源模块下载功能`,
   `Beta 0.2.0 - ✅ 完成公共资源面板与资源上传功能`,

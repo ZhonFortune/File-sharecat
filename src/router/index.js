@@ -8,7 +8,7 @@ const routes = [
         name: 'publicResource',
         component: () => import('@/views/publicResource.vue')
     }, {
-        path: '/tload',
+        path: '/private',
         name: 'tokenDownload',
         component: () => import('@/views/tokenDownload.vue')
     },
@@ -156,6 +156,5 @@ if (!ISDEV) {
         next();
     })
 }
-
 
 export default router
